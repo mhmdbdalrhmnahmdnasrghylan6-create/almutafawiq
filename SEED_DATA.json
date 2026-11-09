@@ -1,0 +1,19 @@
+{
+  "subjects": [
+    {"id":"math","title":"الرياضيات","order":1,"active":true},
+    {"id":"science","title":"العلوم","order":2,"active":true},
+    {"id":"arabic","title":"اللغة العربية","order":3,"active":true},
+    {"id":"quran","title":"القرآن الكريم","order":4,"active":true},
+    {"id":"islamic","title":"التربية الإسلامية","order":5,"active":true},
+    {"id":"geography_history","title":"الجغرافيا والتاريخ","order":6,"active":true}
+  ],
+  "lesson_example": {
+    "title":"عنوان الدرس",
+    "summary":"ملخص الدرس",
+    "content":"محتوى الدرس الذي تملك حق نشره",
+    "videoUrl":"",
+    "isFree":true,
+    "published":false,
+    "order":1
+  }
+}

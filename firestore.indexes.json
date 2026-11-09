@@ -1,0 +1,7 @@
+{
+  "indexes": [
+    { "collectionGroup": "subjects", "queryScope": "COLLECTION", "fields": [ { "fieldPath": "active", "order": "ASCENDING" }, { "fieldPath": "order", "order": "ASCENDING" } ] },
+    { "collectionGroup": "lessons", "queryScope": "COLLECTION", "fields": [ { "fieldPath": "published", "order": "ASCENDING" }, { "fieldPath": "order", "order": "ASCENDING" } ] }
+  ],
+  "fieldOverrides": []
+}

@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() {
+      return signedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.role == 'student';
+      allow update: if signedIn() && (request.auth.uid == uid || isAdmin())
+        && (isAdmin() || request.resource.data.role == resource.data.role);
+      allow delete: if isAdmin();
+    }
+
+    match /subjects/{subjectId} {
+      allow read: if resource.data.active == true;
+      allow write: if isAdmin();
+      match /lessons/{lessonId} {
+        allow read: if signedIn() && resource.data.published == true
+          && (resource.data.isFree == true ||
+            (exists(/databases/$(database)/documents/subscriptions/$(request.auth.uid)) &&
+            get(/databases/$(database)/documents/subscriptions/$(request.auth.uid)).data.status == 'active' &&
+            get(/databases/$(database)/documents/subscriptions/$(request.auth.uid)).data.expiresAt > request.time));
+        allow write: if isAdmin();
+      }
+    }
+
+    match /subscriptions/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow write: if false; // Only trusted Cloud Functions may write subscription records.
+    }
+
+    match /subscriptionCodes/{codeHash} {
+      allow read, write: if false; // Never expose raw codes or hashes to app clients.
+    }
+  }
+}
